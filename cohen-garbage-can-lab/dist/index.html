@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#050505"><title>A Garbage Can Model of Organizational Choice</title><link rel="stylesheet" href="./styles.css"></head>
+<body><header class="site-header"><div class="wrap header-inner"><div class="brand-copy"><h1 id="siteTitle">A Garbage Can Model of Organizational Choice</h1><span>COHEN · MARCH · OLSEN · 1972</span></div><div class="producer"><div class="producer-logo"><img src="./assets/percussive-lab-logo.png" alt="Percussive Lab 로고"></div><span class="producer-caption">Produced by Percussive Lab</span></div></div></header>
+<main class="wrap visual-main">
+<div class="visual-head"><div class="visual-title"><img id="headerImage" alt="" hidden><p id="mainSubtitle">기간별 이동과 결정의 모습 확인</p></div><div class="legend"><span><i class="legend-symbol person"></i> 참여자</span><span><i class="legend-symbol choice"></i> 선택기회</span><span><i class="legend-symbol problem"></i> 문제</span></div></div>
+<div class="visual-layout"><section class="visual-section" aria-label="애니메이션 시뮬레이션">
+<div class="visual-toolbar"><div class="period-number"><small>기간</small><strong id="periodDisplay">0 / 20</strong></div><button id="backBtn" class="button secondary" type="button">←</button><button id="playBtn" class="button primary" type="button">▶ 재생</button><button id="nextBtn" class="button secondary" type="button">→</button><label class="speed-control">속도 <select id="speed"><option value="1600">느리게</option><option value="900" selected>보통</option><option value="420">빠르게</option></select></label></div>
+<input id="periodSlider" class="time-slider" type="range" min="0" max="20" value="0" aria-label="기간 이동">
+<div class="stage-frame"><canvas id="stage" width="1200" height="700" aria-label="참여자 원, 선택기회 네모, 문제 세모의 기간별 이동 애니메이션"></canvas></div>
+<div class="live-strip"><div><small>결정</small><strong id="statDecisions">0 / 10</strong></div><div><small>해결된 문제</small><strong id="statProblems">0 / 20</strong></div><div><small>결정양식</small><strong id="statStyles">해결 0 · 간과 0 · 도피 0</strong></div><div><small>미해결</small><strong id="statUnsolved">20</strong></div></div>
+<p class="period-note" id="periodNote" aria-live="polite" hidden></p>
+<div class="inspector" id="choiceDetail" aria-live="polite">네모 선택 → 상태 확인</div>
+<details class="compact-detail"><summary>기간별 이동 기록</summary><ol id="eventList"></ol></details>
+<details class="compact-detail"><summary>부록 기록 지표</summary><div id="appendixMetrics" class="metrics-list"></div></details>
+</section><aside class="controls" aria-labelledby="controls-title"><div class="controls-top"><p class="eyebrow">PARAMETERS</p><h2 id="controls-title">설정</h2><p>값 변경 → 적용 → 0기부터 재생</p></div>
+        <form id="settingsForm">
+          <label class="field"><span>대학 유형 · 논문 가정</span><select id="universityPreset"><option value="">직접 조정</option><option value="0200">대규모·부유 / 좋은 시기 (0200)</option><option value="1110">대규모·부유 / 역경 초기 (1110)</option><option value="0111">대규모·부유 / 역경 지속 (0111)</option><option value="1112">대규모·빈곤 / 좋은 시기 (1112)</option><option value="2112">대규모·빈곤 / 역경 초기 (2112)</option><option value="1111">대규모·빈곤 / 역경 지속 (1111)</option><option value="0002">소규모·부유 / 좋은 시기 (0002)</option><option value="1002">소규모·부유 / 역경 초기 (1002)</option><option value="0001">소규모·부유 / 역경 지속 (0001)</option><option value="1221">소규모·빈곤 / 좋은 시기 (1221)</option><option value="2211">소규모·빈곤 / 역경 초기 (2211)</option><option value="1211">소규모·빈곤 / 역경 지속 (1211)</option></select></label>
+          <p class="field-help">코드 순서: 부하–접근구조–결정구조–에너지 분포. 대학별 수치는 논문의 가설적 설정입니다.</p>
+
+          <div class="field-pair"><label class="field"><span>기간 수</span><input id="periods" type="number" min="1" max="40" step="1"></label><label class="field"><span>선택기회 수</span><input id="choices" type="number" min="1" max="20" step="1"></label></div>
+          <div class="field-pair"><label class="field"><span>문제 수</span><input id="problems" type="number" min="1" max="40" step="1"></label><label class="field"><span>참여자 수</span><input id="participants" type="number" min="1" max="20" step="1"></label></div>
+          <label class="field"><span>문제당 요구 에너지 · 부하</span><select id="load"><option value="1.1">낮음 · 1.1</option><option value="2.2">중간 · 2.2</option><option value="3.3">높음 · 3.3</option></select></label>
+          <div class="field-pair"><label class="field"><span>접근구조 A · 문제→선택</span><select id="access"><option value="unsegmented">비분절</option><option value="hierarchical">위계</option><option value="specialized">전문화</option><option value="custom">사용자 행렬</option></select></label><label class="field"><span>결정구조 D · 사람→선택</span><select id="decision"><option value="unsegmented">비분절</option><option value="hierarchical">위계</option><option value="specialized">전문화</option><option value="custom">사용자 행렬</option></select></label></div>
+          <label class="field"><span>참여자 에너지 분포</span><select id="energyDistribution"><option value="importantLess">중요한 참여자에게 적게 · E0</option><option value="equal">모두 동일 · E1</option><option value="importantMore">중요한 참여자에게 많이 · E2</option></select></label>
+          <label class="field"><span>기간당 잠재 에너지 총량</span><input id="totalEnergy" type="number" min="0" max="100" step="0.1"></label>
+          <div class="field-pair"><label class="field"><span>해결책 계수 방식</span><select id="coefficientMode"><option value="constant">매 기간 동일</option><option value="footnote">논문 각주 3의 변동값</option><option value="custom">기간별 직접 입력</option></select></label><label class="field"><span>동일 계수</span><input id="coefficient" type="number" min="0" max="1" step="0.05"></label></div>
+
+          <details class="advanced"><summary>진입순서·이동조건·개별값 조정</summary>
+            <div class="advanced-inner">
+              <div class="field-pair"><label class="field"><span>선택 진입순서</span><select id="choiceOrder"><option value="paperA">논문 A</option><option value="paperB">논문 B</option><option value="ascending">번호순</option><option value="custom">시점 직접 입력</option></select></label><label class="field"><span>문제 진입순서</span><select id="problemOrder"><option value="paperA">논문 A</option><option value="paperB">논문 B</option><option value="ascending">번호순</option><option value="custom">시점 직접 입력</option></select></label></div>
+              <div class="field-pair"><label class="field"><span>이동조건 NA</span><select id="movement"><option value="1">1 · 문제와 참여자 모두 이동</option><option value="2">2 · 참여자만 이동</option><option value="3">3 · 문제만 이동</option><option value="4">4 · 둘 다 이동하지 않음</option></select></label><label class="field"><span>출력조건 IO</span><select id="outputMode"><option value="2">2 · 기간별 이력</option><option value="1">1 · 요약통계 중심</option></select></label></div>
+              <label class="field"><span>선택별 진입 기간 · 선택 ID 순</span><textarea id="choiceEntriesCustom" rows="2" placeholder="예: 8, 5, 7, 7, ..."></textarea></label>
+              <label class="field"><span>문제별 진입 기간 · 문제 ID 순</span><textarea id="problemEntriesCustom" rows="2" placeholder="예: 4, 9, 5, 7, ..."></textarea></label>
+              <label class="field"><span>기간별 해결책 계수</span><textarea id="coefficientCustom" rows="2" placeholder="예: 1, .9, .7, .3, ..."></textarea></label>
+              <label class="field"><span>문제별 요구 에너지</span><textarea id="problemDemandCustom" rows="2" placeholder="비워 두면 선택한 부하를 모든 문제에 적용"></textarea></label>
+              <label class="field"><span>참여자별 기간당 에너지</span><textarea id="participantEnergyCustom" rows="2" placeholder="비워 두면 선택한 에너지 분포를 적용"></textarea></label>
+              <label class="field"><span>접근구조 A · 행마다 문제 하나, 열마다 선택 하나</span><textarea id="accessMatrixCustom" rows="3" placeholder="사용자 행렬을 선택한 경우 0과 1로 입력"></textarea></label>
+              <label class="field"><span>결정구조 D · 행마다 참여자 하나, 열마다 선택 하나</span><textarea id="decisionMatrixCustom" rows="3" placeholder="사용자 행렬을 선택한 경우 0과 1로 입력"></textarea></label>
+            </div>
+          </details>
+
+          <div class="derived" id="derivedNumbers" aria-live="polite"></div>
+          <p id="formError" class="form-error" role="alert" hidden></p>
+          <button class="button primary apply-button" type="submit">조건 적용 · 처음부터 시작</button>
+          <div class="control-actions"><button class="text-button" id="resetBtn" type="button">논문 규모로 초기화</button><button class="text-button" id="shareBtn" type="button">이 설정 링크 복사</button></div>
+        </form></aside></div><footer class="source-note"><span id="sourceNote">FORTRAN 프로그램의 결과와 다를 수 있음.</span> <a href="https://www.jstor.org/stable/2392088" target="_blank" rel="noopener noreferrer">논문 정보</a></footer></main><footer class="copyright-footer"><div class="wrap">© 2026 Percussive Lab. All rights reserved.</div></footer><script type="module" src="./app.js"></script></body></html>
